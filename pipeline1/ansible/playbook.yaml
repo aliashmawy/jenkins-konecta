@@ -7,7 +7,7 @@
         name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2', 'software-properties-common']
         update_cache: yes
 
-    # - name: Add Docker GPG key
+    ## - name: Add Docker GPG key
     #   apt_key:
     #     url: https://download.docker.com/linux/ubuntu/gpg
 
