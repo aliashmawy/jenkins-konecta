@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    TF_DIR = 'terraform'
-    ANSIBLE_DIR = 'ansible'
+    TF_DIR = 'pipeline1/terraform'
+    ANSIBLE_DIR = 'pipeline1/ansible'
     AWS_ACCESS_KEY_ID = credentials('access_key')
     AWS_SECRET_ACCESS_KEY = credentials('secret_key')
   }
