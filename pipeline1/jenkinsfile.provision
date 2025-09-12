@@ -61,7 +61,6 @@ pipeline {
           dir("${ANSIBLE_DIR}"){
           sh '''
             chmod 600 "$SSH_KEY_FILE"
-            pip install boto3 botocore
             ansible-playbook -i inventroy_aws_ec2.yaml --private-key "$SSH_KEY_FILE" -u "$SSH_USER" playbook.yaml
           '''
         }
