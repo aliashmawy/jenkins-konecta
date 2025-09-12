@@ -60,7 +60,7 @@ pipeline {
                                           usernameVariable: 'SSH_USER')]) {
           sh '''
             chmod 600 "$SSH_KEY_FILE"
-            ansible-playbook -i inventroy_aws_ec2.yaml --private-key "$SSH_KEY_FILE" -u "$SSH_USER playbook.yaml"
+            ansible-playbook -i inventroy_aws_ec2.yaml --private-key "$SSH_KEY_FILE" -u "$SSH_USER" playbook.yaml
           '''
         }
       }
