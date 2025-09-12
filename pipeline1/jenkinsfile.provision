@@ -58,10 +58,12 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: 'ephemeral-instance',
                                           keyFileVariable: 'SSH_KEY_FILE',
                                           usernameVariable: 'SSH_USER')]) {
+          dir("${ANSIBLE_DIR}"){
           sh '''
             chmod 600 "$SSH_KEY_FILE"
             ansible-playbook -i inventroy_aws_ec2.yaml --private-key "$SSH_KEY_FILE" -u "$SSH_USER" playbook.yaml
           '''
+        }
         }
       }
     }
