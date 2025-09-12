@@ -1,0 +1,69 @@
+pipeline {
+  agent any
+
+  environment {
+    TF_DIR = 'terraform'
+    ANSIBLE_DIR = 'ansible'
+    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+  }
+
+  stages {
+    stage('Clean Workspace') {
+      steps {
+        deleteDir()
+      }
+    }
+
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+
+    stage('Terraform Init') {
+      steps {
+        dir("${TF_DIR}") {
+          sh 'terraform init'
+        }
+      }
+    }
+    
+    stage('Terraform Validate'){
+      steps {
+        dir("${TF_DIR}") {
+          sh 'terraform validate'
+        }
+      }
+    }
+
+    stage('Terraform Plan') {
+      steps {
+        dir("${TF_DIR}") {
+          sh 'terraform plan -out=tfplan'
+        }
+      }
+    }
+
+    stage('Terraform Apply') {
+      steps {
+        dir("${TF_DIR}") {
+          sh 'terraform apply -auto-approve tfplan'
+        }
+      }
+    }
+    stage('Run Ansible') {
+      steps {
+        withCredentials([sshUserPrivateKey(credentialsId: 'ephemeral-instance',
+                                          keyFileVariable: 'SSH_KEY_FILE',
+                                          usernameVariable: 'SSH_USER')]) {
+          sh '''
+            chmod 600 "$SSH_KEY_FILE"
+            ansible-playbook -i inventroy_aws_ec2.yaml --private-key "$SSH_KEY_FILE" -u "$SSH_USER playbook.yaml"
+          '''
+        }
+      }
+    }
+  }
+}
