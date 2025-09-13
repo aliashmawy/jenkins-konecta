@@ -51,18 +51,29 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ephemeral-instance',
-                                          keyFileVariable: 'SSH_KEY_FILE',
-                                          usernameVariable: 'SSH_USER')]) {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId: 'ephemeral-instance',
+                                    keyFileVariable: 'SSH_KEY_FILE',
+                                    usernameVariable: 'SSH_USER'),
+                    usernamePassword(credentialsId: 'docker-cred',
+                                usernameVariable: 'USERNAME',
+                                passwordVariable: 'PASSWORD')
+                ]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$SSH_USER"@${params.ec2_ip}
-                          docker rm -f web || true &&
-                          docker run -d --name web -p 80:80 ${DOCKER_IMAGE}
-                        
+                        ssh -o StrictHostKeyChecking=no -i "\$SSH_KEY_FILE" "\$SSH_USER"@${params.ec2_ip} '
+                            echo "Logging into Docker Hub..."
+                            echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin
+                            
+                            echo "Stopping existing container..."
+                            docker rm -f web || true
+                            
+                            echo "Pulling and running new container..."
+                            docker run -d --name web -p 80:80 ${DOCKER_IMAGE}
+                        '
                     """
-                }
-            }
         }
+    }
+}
 
         stage('Verify Deployment') {
             steps {
