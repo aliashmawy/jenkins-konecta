@@ -55,7 +55,7 @@ pipeline {
                                           keyFileVariable: 'SSH_KEY_FILE',
                                           usernameVariable: 'SSH_USER')]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$SSH_USER"@${params.EC2_IP}
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$SSH_USER"@${params.ec2-ip}
                           docker rm -f web || true &&
                           docker run -d --name web -p 80:80 ${DOCKER_IMAGE}
                         
