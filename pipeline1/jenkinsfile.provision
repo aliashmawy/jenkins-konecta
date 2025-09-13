@@ -61,7 +61,7 @@ pipeline {
             echo "EC2 IP is ${ec2_ip}"
 
             build job: 'pipeline2-konecta',
-                  parameters: [string(name: 'ec2-ip', value: ec2_ip)],
+                  parameters: [string(name: 'ec2_ip', value: ec2_ip)],
                   wait: false
         }
         }

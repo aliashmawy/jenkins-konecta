@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'ec2-ip', defaultValue: '', description: 'Public IP of target EC2 (from Pipeline 1)')
+        string(name: 'ec2_ip', defaultValue: '', description: 'Public IP of target EC2 (from Pipeline 1)')
     }
 
     environment {
@@ -55,7 +55,7 @@ pipeline {
                                           keyFileVariable: 'SSH_KEY_FILE',
                                           usernameVariable: 'SSH_USER')]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$SSH_USER"@${params.ec2-ip}
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$SSH_USER"@${params.ec2_ip}
                           docker rm -f web || true &&
                           docker run -d --name web -p 80:80 ${DOCKER_IMAGE}
                         
