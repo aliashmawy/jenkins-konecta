@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Cleanup Ephemeral EC2s') {
             steps {
@@ -14,9 +14,9 @@ pipeline {
 
                         if [ -n "$INSTANCE_IDS" ]; then
                           aws ec2 terminate-instances --instance-ids $INSTANCE_IDS
-                          echo "✅ Terminated instances: $INSTANCE_IDS"
+                          echo " Terminated instances: $INSTANCE_IDS"
                         else
-                          echo "ℹ️ No ephemeral instances found."
+                          echo "ℹ No ephemeral instances found."
                         fi
                     '''
                 }
