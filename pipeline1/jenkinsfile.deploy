@@ -22,7 +22,7 @@ pipeline {
                     def timestamp = sh(script: "date +%Y-%m-%d_%H-%M-%S", returnStdout: true).trim()
                     sh """
                         echo '<h1>Build: ${BUILD_NUMBER}</h1><p>Timestamp: ${timestamp}</p>' > index.html
-                        cat Dockerfile
+                        cat dockerfile
                         docker build -t ${DOCKER_IMAGE} .
                     """
                 }
