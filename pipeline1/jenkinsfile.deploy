@@ -28,6 +28,7 @@ pipeline {
                     sh """
                         echo '<h1>Build: ${BUILD_NUMBER}</h1><p>Timestamp: ${timestamp}</p>' > index.html
                         pwd
+                        ls -l
                         cat Dockerfile
                         docker build -t ${DOCKER_IMAGE} .
                     """
