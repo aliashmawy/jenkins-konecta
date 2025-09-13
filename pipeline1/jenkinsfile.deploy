@@ -40,6 +40,7 @@ pipeline {
                     sh "docker push ${DOCKER_IMAGE}"
             }
         }
+        }
 
         stage('Deploy to EC2') {
             steps {
@@ -64,5 +65,4 @@ pipeline {
             }
         }
     }
-}
 }
